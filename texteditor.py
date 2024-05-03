@@ -40,8 +40,10 @@ class TextEditor:
         undo_button.pack(side="left", padx=2, pady=2)
 
         # keyboard shortcut
-        self.root.bind("<Command-y>", self.yank)
-        self.root.bind("<p>", self.put)
+        self.root.bind("<Command-c>", self.yank)
+        self.root.bind("<Command-v>", self.put)
+        self.root.bind("<Command-z>", self.textarea.edit_undo)
+        self.root.bind("<Command-y>", lambda event: self.textarea.edit_redo())
 
     def new_file(self):
         self.textarea.delete(1.0, tk.END)
@@ -69,6 +71,8 @@ class TextEditor:
         self.root.clipboard_append(selected_text)
 
     def put(self, event=None):
+        if event:
+            return
         clipboard_text = self.root.clipboard_get()
         self.textarea.insert(tk.INSERT, clipboard_text)
 
